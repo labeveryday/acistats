@@ -12,7 +12,7 @@ To get started: Download the code and cd to the `acistats` directory
 
 ```bash
 git clone https://github.com/labeveryday/acistats.git
-cd device banner
+cd acistats
 ```
 
 ## Python Virtual Environment
