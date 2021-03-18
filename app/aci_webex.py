@@ -1,6 +1,7 @@
+#!/usr/bin/env python
 """
 Script leverages the WebexTeamssdk
-Sends a webex teams message 
+Sends a webex teams message
 Will create room if not created
 Deletes a supplied webex room
 """
@@ -18,7 +19,7 @@ api = WebexTeamsAPI(WEBEX_TEAMS_ACCESS_TOKEN)
 
 
 def send_webex_message(message, webex_room=WEBEX_ROOM_NAME,
-                       webex_email=WEBEX_EMAIL_ADDRESS, token=WEBEX_TEAMS_ACCESS_TOKEN):
+                       webex_email=WEBEX_EMAIL_ADDRESS):
     # Send a message to a supplied webex room
     # Creates room if not listed
     rooms = api.rooms.list()
@@ -31,7 +32,7 @@ def send_webex_message(message, webex_room=WEBEX_ROOM_NAME,
         api.memberships.create(webex_room.id, personEmail=webex_email)
         api.messages.create(webex_room.id, text=message)
 
-def delete_webex_room(token=WEBEX_TEAMS_ACCESS_TOKEN, webex_room=WEBEX_ROOM_NAME):
+def delete_webex_room(webex_room=WEBEX_ROOM_NAME):
     # Deletes supplied webex room
     rooms = api.rooms.list()
     aci_room = [room.id for room in rooms if room.title == webex_room]

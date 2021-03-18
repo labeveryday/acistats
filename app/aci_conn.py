@@ -1,7 +1,8 @@
+#!/usr/bin/env python
 import json
+import sys
 import requests
 from .credenitials import URL, USERNAME, PASSWORD
-from pprint import pprint
 
 
 class iACI:
@@ -19,7 +20,7 @@ class iACI:
         self.password = password
         self.url = url
         self.token = self.get_token()
-    
+
     def get_token(self):
         """POST logins into APIC and Returns Token
             return: Return the APIC token
@@ -34,13 +35,14 @@ class iACI:
                 }
             }
         headers = {"Content-Type": "application/json"}
-        response = requests.request('POST', self.url + "/api/aaaLogin.json", headers=headers, json=payload)
+        response = requests.request('POST', self.url + "/api/aaaLogin.json",
+                                    headers=headers, json=payload)
         if response.status_code == 200:
             json_data = json.loads(response.text)
             return "APIC-cookie=" + json_data['imdata'][0]['aaaLogin']['attributes']['token']
         else:
             print(f"Login failed: {response.status_code}")
-            exit()
+            sys.exit()
 
     def get_tenant(self):
         """GET created ACI tenants
@@ -68,7 +70,7 @@ class iACI:
         response = requests.request("GET", url, headers=headers)
         return json.loads(response.text)
 
-    def get_aci_health(self):    
+    def get_aci_health(self):
         """GET created ACI Fabric Health
             return: Return the APIC tenants
             rtype: dict
@@ -81,7 +83,7 @@ class iACI:
         response = requests.request("GET", url, headers=headers)
         return json.loads(response.text)
 
-    def get_aci_faultinfo(self):    
+    def get_aci_faultinfo(self):
         """GET created ACI Fabric Health
             type data: str
             return: Return the APIC tenants
@@ -96,9 +98,8 @@ class iACI:
             '&order-by=faultInfo.severity|desc&page=1&page-size=15')
         response = requests.request("GET", url, headers=headers)
         return json.loads(response.text)
-    
+
     def get_crc_errors(self):
-        ports = []
         headers = {
             "Content-Type": "application/json",
             "Cookie": self.token
